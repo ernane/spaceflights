@@ -1,0 +1,33 @@
+name: PR title follows Conventional Commits
+
+on:
+  pull_request:
+    types: [opened, edited, reopened, synchronize]
+
+permissions:
+  pull-requests: read
+
+jobs:
+  validate_pr_title:
+    name: Validate PR title
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate Conventional Commit format
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          title="$(jq -r '.pull_request.title' "$GITHUB_EVENT_PATH")"
+          echo "PR title: $title"
+
+          # Conventional Commits (used as squash commit message)
+          # <type>(<scope>)?!: <description>
+          # scope is optional; "!" is optional; description must be non-empty
+          pattern='^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert|hotfix)(\([a-z0-9._-]+\))?(!)?: .+'
+
+          if [[ ! "$title" =~ $pattern ]]; then
+            echo "::error title=Invalid PR title::PR title must follow Conventional Commits, e.g. \"feat(pipelines): add reporting dataset\""
+            echo "::error title=Branch naming reminder::Branches should be <type>/<short-description>, e.g. feat/add-customer-segmentation"
+            exit 1
+          fi
+

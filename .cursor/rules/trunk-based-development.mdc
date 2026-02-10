@@ -1,0 +1,42 @@
+---
+description: Trunk-based development + branch naming + PR squash rules
+alwaysApply: true
+---
+
+# Trunk-Based Development (TBD)
+
+Este repositório segue **Trunk-Based Development**: a branch `main` deve ficar sempre **integrável** (CI verde) e com mudanças pequenas e frequentes.
+
+## Regras do trunk (`main`)
+
+- Mantenha `main` sempre “verde”: sem quebrar build/test.
+- Prefira **PRs pequenos** e focados (escopo mínimo).
+- Evite branches longas: idealmente horas–1 dia; no máximo poucos dias.
+- Integre cedo e com frequência: traga `main` para sua branch para reduzir drift.
+- Funcionalidade incompleta deve entrar atrás de **feature flag** (não segure em branch longa).
+
+## Convenção de branches
+
+Formato obrigatório:
+
+```
+<type>/<short-description>
+```
+
+- `type` (use um destes): `feat`, `fix`, `docs`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`, `revert`, `hotfix`
+- `short-description`: **kebab-case**, minúsculo, sem espaços; use `-` como separador; números ok.
+
+Exemplos:
+- `feat/add-customer-segmentation`
+- `fix/handle-null-shuttle-size`
+- `docs/update-readme-install`
+
+## Pull Request e merge (squash)
+
+Este repo usa **Squash merge**. Portanto:
+
+- O **título do PR** deve seguir **Conventional Commits** (ele vira a mensagem do commit no `main`).
+  - Ex.: `feat(pipelines): add reporting dataset`
+- (Recomendado) O `type` da branch combine com o `type` do título do PR.
+- Checklist antes do merge: CI verde, review ok, branch atualizada com `main`, sem dados/credenciais.
+
